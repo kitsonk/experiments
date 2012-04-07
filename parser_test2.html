@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title>
+    Parser Experiment
+  </title>
+  <style type="text/css">
+    @import "../dojo/dijit/themes/claro/document.css";
+    @import "../dojo/dijit/themes/claro/claro.css";
+  </style>
+  <script type="text/javascript" src="../dojo/dojo/dojo.js" data-dojo-config="async: true"></script>
+  <script type="text/javascript">
+    require([
+        "dojo/_base/window",
+        "dojo/AdapterRegistry",
+        "dojo/query",
+        "dojo/domReady!"], 
+    function(win, AdapterRegistry, query){
+      function queryWalk(root){
+        var parsedNodes = [];
+        var nodes = query("[data-test]", root);
+        for(var i = 0; i < nodes.length; i++){
+          var node = nodes[i];
+          var type = node.getAttribute("data-test");
+          parsedNodes.push({ node: node, type: type, scripts: query("> script[type^='dojo/']", node) });
+        }
+        return parsedNodes;
+      };
+
+      function whileWalk(root){
+        var node = root,
+            parent = {},
+            parsedNodes = [],
+            stopParser = false;
+        
+        while(true){
+          if(!node){
+            if(!parent || !parent.parent){
+              break;
+            }
+            node = parent.node.nextSibling;
+            parent = parent.parent;
+            stopParser = false;
+            continue;
+          }
+          
+          if(node.nodeType !== 1){
+            node = node.nextSibling;
+            continue;
+          }
+          if(parent.scripts && node.nodeName.toLowerCase() == "script"){
+            type = node.getAttribute("type");
+            if(type && /^dojo\/\w/i.test(type)){
+              parent.scripts.push(node);
+            }
+            node = node.nextSibling;
+            continue;
+          }
+          if(stopParser){
+            node = node.nextSibling;
+            continue;
+          }
+          var type = node.getAttribute("data-test");
+          var firstChild = node.firstChild;
+          if(!type && (!firstChild || (firstChild.nodeType == 3 && !firstChild.nextSibling))){
+            node = node.nextSibling;
+            continue;
+          }
+          var current = {
+            node: node,
+            parent: parent
+          };
+          if(type){
+            current.type = type;
+            current.scripts = [];
+            parsedNodes.push(current);
+            stopParser = node.getAttribute("data-stop") ? true : false;
+          }
+          node = firstChild;
+          parent = current;
+        }
+        return parsedNodes;
+      };
+      
+      var registry = new AdapterRegistry();
+      
+      registry.register("data-test",
+        function(node){
+          return node.getAttribute("data-test");
+        },
+        function(node){
+          var type = node.getAttribute("data-test");
+          return {
+            node: node, 
+            type: type, 
+            scripts: query("> script[type^='dojo/']", node),
+            instantiate: true, 
+            stopParser: node.getAttribute("data-stop") ? true : false
+          };
+        }
+      );
+      
+      registry.register("skip node",
+        function(node){
+          return !node.firstChild || (node.firstChild.nodeType != 1 && !node.firstChild.nextSibling);
+        },
+        function(){
+          return { stopParser: true };
+        }
+      );
+      
+      registry.register("default",
+        function(){
+          return true;
+        },
+        function(){
+          return { stopParser: false };
+        }
+      );
+      
+      function adapterWalk(root){
+        var node = root,
+            parent = {},
+            parsedNodes = [];
+        
+        while(true){
+          if(!node){
+            if(!parent || !parent.parent){
+              break;
+            }
+            node = parent.node.nextSibling;
+    				parent = parent.parent;
+    				continue;
+          }
+          
+          if(node.nodeType == 1){
+            var current = registry.match(node);
+            current.parent = parent;
+            current.node = node;
+            if(current.instantiate){
+              parsedNodes.push(current);
+            }
+            if(current.stopParser){
+              node = node.nextSibling;
+            }else{
+              node = node.firstChild;
+              parent = current;
+            }
+          }else{
+            node = node.nextSibling;
+          }
+        }
+        return parsedNodes;
+      };
+
+      function getWalk(root){
+        var parsedNodes = [];
+        var nodes = root.getElementsByTagName("*");
+        var i, j;
+        for(i = 0; i < nodes.length; i++){
+          var node = nodes[i];
+          var type = node.getAttribute("data-test");
+          if(type){
+            if(node._skip){
+              node._skip = "";
+              continue;
+            }
+            if(node.getAttribute("data-stop")){
+              var s = node.getElementsByTagName("*");
+              for(j = 0; j < s.length; j++){
+                s[j]._skip = "1";
+              }
+            }
+            parsedNodes.push({ node: node, type: type, scripts: query("> script[type^='dojo/']", node) });
+          }
+        }
+        return parsedNodes;
+      };
+      
+      recurseWalk = function(root){
+        var done = false,
+            stopParser = false,
+            parsedNodes = [];
+        
+        function up(parent){
+          var node = parent.node.nextSibling;
+          parent = parent.parent;
+          stopParser = false;
+          next(node, parent);
+        }
+        
+        function down(current, node, parent){
+          node = node.firstChild;
+          parent = current;
+          next(node, parent);
+        }
+        
+        function next(node, parent){
+          if(done){
+            return;
+          }
+          if(!node){
+            if(!parent || !parent.parent){
+              done = true;
+              return;
+            }
+            up(parent);
+            return;
+          }
+          if(node.nodeType !== 1){
+            node = node.nextSibling;
+            next(node, parent);
+            return;
+          }
+          if(parent.scripts && node.nodeName.toLowerCase() == "script"){
+            type = node.getAttribute("type");
+            if(type && /^dojo\/\w/i.test(type)){
+              parent.scripts.push(node);
+            }
+            node = node.nextSibling;
+            next(node, parent);
+            return;
+          }
+          if(stopParser){
+            node = node.nextSibling;
+            next(node, parent);
+            return;
+          }
+          var type = node.getAttribute("data-test");
+          var firstChild = node.firstChild;
+          if(!type && (!firstChild || (firstChild.nodeType == 3 && !firstChild.nextSibling))){
+            node = node.nextSibling;
+            next(node, parent);
+            return;
+          }
+          var current = {
+            node: node,
+            parent: parent
+          };
+          if(type){
+            current.type = type;
+            current.scripts = [];
+            parsedNodes.push(current);
+            stopParser = node.getAttribute("data-stop") ? true : false;
+          }
+          down(current, node, parent);
+        }
+        
+        next(root, {});
+        
+        return parsedNodes;
+      }
+      
+      var walk1 = whileWalk(win.body());
+      console.log("whileWalk: " + walk1.length);
+      console.log(walk1);
+      var walk2 = getWalk(win.body());
+      console.log("getWalk: " + walk2.length);
+      console.log(walk2);
+      var walk3 = queryWalk(win.body());
+      console.log("queryWalk: " + walk3.length);
+      console.log(walk3);
+      var walk4 = adapterWalk(win.body());
+      console.log("adapterWalk: " + walk4.length);
+      console.log(walk4);
+      var walk5 = recurseWalk(win.body());
+      console.log("recurseWalk: " + walk5.length);
+      console.log(walk5);
+      
+    });
+  </script>
+</head>
+<body class="claro">
+  <h1>Test Header</h1>
+  <div data-test="test">
+    <div>Test</div>
+    <div>Test2</div>
+    <div>
+      <div data-test="test">
+        <span>Test Span</span>
+        <script type="dojo/type">
+          console.log("nothing");
+        </script>
+        <script type="dojo/type">
+          console.log("nothing");
+        </script>
+      </div>
+    </div>
+  </div>
+  <table>
+    <tbody>
+      <tr><td><label for="a">A</label></td><td><input type=text name="a" id="a" value="test" /></td></tr>
+      <tr><td><label for="a">B</label></td><td><input type=text name="a" id="a" value="test" data-test="test" /></td></tr>
+      <tr><td colspan=2><button type="button" data-test="test">Label</button><button type="button">Label</button></td></tr>
+    </tbody>
+  </table>
+  <div>
+    <div>
+      <div>
+        <div>
+          <div data-test="test"></div>
+        </div>
+        <div>
+          <div data-test="test" data-stop="true">
+            <div>
+              <div>Text</div>
+              <div data-test="test"></div>
+            </div>
+            <script type="dojo/type">
+              console.log("child");
+            </script>
+            <div data-test="text"></div>
+          </div>
+          <div data-test="test"></div>
+          <div>Text</div>
+        </div>
+      </div>
+    </div>
+    <div data-test="text">
+      <div>
+        <div data-test="text"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

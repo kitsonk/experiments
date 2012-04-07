@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title>
+    Parser Experiment
+  </title>
+  <style type="text/css">
+    @import "../dojo/dijit/themes/claro/document.css";
+    @import "../dojo/dijit/themes/claro/claro.css";
+  </style>
+  <script type="text/javascript" src="../dojo/dojo/dojo.js" data-dojo-config="async: true"></script>
+  <script type="text/javascript">
+    require([
+        "dojo/_base/window",
+        "dojo/dom",
+        "dojo/parser",
+        "dijit/form/TextBox",
+        "dijit/layout/ContentPane",
+        "dojo/domReady!"], 
+    function(win, dom, parser){
+  
+      function size(o){
+        var s = 0, k;
+        for(k in o){
+          if(o.hasOwnProperty(k)) s++;
+        }
+        return s;
+      }
+  
+      var start1 = (new Date).getTime();
+      parser.parse(dom.byId("i2")).then(function(scanNodes){
+        console.log(scanNodes);
+        var endScan = (new Date).getTime() - start1;
+        console.log("parser.parse(), " + scanNodes.length + " nodes in " + endScan + "ms");  
+      });
+      
+  
+      var start2 = (new Date).getTime();
+      parser.parse(dom.byId("i1"), { mode: "minimal" }).then(function(scanFastNodes){
+        console.log(scanFastNodes);
+        var endScanFast = (new Date).getTime() - start2;
+        console.log("parser.parse({mode:'minimal'}), " + size(scanFastNodes) + " nodes in " + endScanFast + "ms");
+      });
+       
+    });
+  </script>
+</head>
+<body class="claro" dir="ltr">
+  <h1>
+    Parser Experiment
+  </h1>
+  <div id="i1">
+    <div data-dojo-require="dijit/form/Button,dijit/form/TextBox" data-dojo-args="Button,TextBox"></div>
+    <p dir="rtl">
+      <button id="b1" data-dojo-type="Button" type="button"><span>Button1</span> <script type="dojo/on" data-dojo-event="click">
+        console.log("clicked!");
+      </script></button>
+    </p>
+    <div id="cp1" data-dojo-type="dijit/layout/ContentPane">
+      <script type="dojo/method">
+        console.log("instantiated");
+      </script> <script type="dojo/connect" data-dojo-event="onClick">
+        console.log("clicked!");
+      </script>
+      <button id="b2" data-dojo-type="dijit/form/Button" type="button" data-dojo-props="onclick: function(){ console.log(this); }">Button2</button>
+    </div>
+    <div>
+      <div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <div>
+                  <button id="b3" data-dojo-type="dijit/form/Button" type="button">Button3</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form>
+      <input type="text" data-dojo-type="dijit/form/TextBox" value="Text"> <input type="text" data-dojo-type="dijit/form/TextBox" value="Text"> <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+    </form>
+    <div>
+      <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+      <div>
+        <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+        <div>
+          <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+          <div>
+            <input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+      <div>
+        <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+        <div>
+          <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+          <div>
+            <input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <div>
+                  <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+  console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+  console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+  console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+  console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+    console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+        console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+            console.log("clicked!");
+                  </script></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <div>
+                  <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+              console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                  console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                      console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                          console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                              console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                  console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                      console.log("clicked!");
+                  </script></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <div>
+                  <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                        console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                            console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                                console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                                    console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                                        console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                                            console.log("clicked!");
+                  </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                                                console.log("clicked!");
+                  </script></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="i2">
+      <div data-dojo-require="dijit/form/Button"></div>
+      <p dir="rtl">
+        <button id="b21" data-dojo-type="dijit/form/Button" type="button"><span>Button1</span> <script type="dojo/on" data-dojo-event="click">
+          console.log("clicked!");
+        </script></button>
+      </p>
+      <div id="cp21" data-dojo-type="dijit/layout/ContentPane">
+        <script type="dojo/method">
+          console.log("instantiated");
+        </script> <script type="dojo/connect" data-dojo-event="onClick">
+          console.log("clicked!");
+        </script>
+        <button id="b22" data-dojo-type="dijit/form/Button" type="button">Button2</button>
+      </div>
+      <div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <div>
+                  <div>
+                    <button id="b23" data-dojo-type="dijit/form/Button" type="button">Button3</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form>
+        <input type="text" data-dojo-type="dijit/form/TextBox" value="Text"> <input type="text" data-dojo-type="dijit/form/TextBox" value="Text"> <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+      </form>
+      <div>
+        <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+        <div>
+          <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+          <div>
+            <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+            <div>
+              <input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+        <div>
+          <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+          <div>
+            <input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+            <div>
+              <input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text"><input type="text" data-dojo-type="dijit/form/TextBox" value="Text">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <div>
+                  <div>
+                    <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+    console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+    console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+    console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+    console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+      console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+          console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+              console.log("clicked!");
+                    </script></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <div>
+                  <div>
+                    <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                    console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                        console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                            console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                    console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                        console.log("clicked!");
+                    </script></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <div>
+                  <div>
+                    <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                          console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                              console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                                  console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                                      console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                                          console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                                              console.log("clicked!");
+                    </script></button> <button data-dojo-type="dijit/form/Button" type="button"><span>Button</span> <script type="dojo/on" data-dojo-event="click">
+                                                                  console.log("clicked!");
+                    </script></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</body>
+</html>

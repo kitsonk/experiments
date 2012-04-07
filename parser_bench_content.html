@@ -1,0 +1,88 @@
+<div id="bc" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='style:"width: 1000px; height: 500px; border: 2px solid blue;"'>
+  <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'top', splitter: true">
+    <h1>A header</h1>
+  </div>
+  <div data-dojo-type="dijit/layout/TabContainer" data-dojo-props="region: 'center'">
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Tab 1', closable: true">
+      <button type="button" data-dojo-type="dijit/form/Button">
+        <span>Button 1</span>
+        <script type="dojo/on" data-dojo-event="click">
+          console.log("clicked");
+        </script>
+      </button>
+      <button type="button" data-dojo-type="dijit/form/Button" disabled="disabled">
+        <span>Button 2</span>
+        <script type="dojo/on" data-dojo-event="click">
+          console.log("clicked");
+        </script>
+      </button>
+      <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'Title Pane 1'">
+        <p>Some content for the title pane</p>
+        <input type="text" data-dojo-type="dijit/form/TextBox" value="text value" />
+        <button type="button" data-dojo-type="dijit/form/Button">
+          <span>Button 3</span>
+          <script type="dojo/on" data-dojo-event="click">
+            console.log("clicked");
+          </script>
+        </button>
+      </div>
+      <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'Title Pane 2'">
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <label for="c1t1">Label</label>
+              </td>
+              <td>
+                <input id="c1t1" name="c1t1" type="text" data-dojo-type="dijit/form/TextBox" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="c1t2">Label</label>
+              </td>
+              <td>
+                <input id="c1t2" name="c1t2" type="text" data-dojo-type="dijit/form/TextBox" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="c1t3">Label</label>
+              </td>
+              <td>
+                <input id="c1t3" name="c1t3" type="text" data-dojo-type="dijit/form/TextBox" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="c1t4">Label</label>
+              </td>
+              <td>
+                <input id="c1t4" name="c1t4" type="text" data-dojo-type="dijit/form/TextBox" />
+              </td>
+            </tr>
+            <tr>
+              <td colspan=2>
+                <button type="button" data-dojo-type="dijit/form/Button">Button</button>
+                <button type="button" data-dojo-type="dijit/form/Button">Button</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <script type="dojo/method">
+        return true;
+      </script>
+    </div>
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Tab 2', closable: true">
+      <div data-dojo-type="dijit/ColorPalette"></div>
+    </div>
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Tab 3'">
+      <div data-dojo-type="dijit/Calendar"></div>
+    </div>
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Tab 4'"></div>
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Tab 5'"></div>
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Tab 6'"></div>
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Tab 7'"></div>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Parser "Real World" Performance</title>
+		<style type="text/css">     
+			@import "../dojo/dojo/resources/dojo.css";
+		</style>
+		<script type="text/javascript" src="../dojo/dojo/dojo.js" data-dojo-config="isDebug:true, async:true"></script>
+		<script type="text/javascript">
+		require([
+		  "doh",
+			"dojo/dom",
+			"dojo/dom-construct",
+			"dojo/parser",
+			"dijit/registry",
+			"dojo/text!./parser_bench_content.html",
+			"dijit/form/Button",
+			"dijit/form/TextBox",
+			"dijit/layout/BorderContainer",
+			"dijit/layout/ContentPane",
+			"dijit/layout/TabContainer",
+			"dijit/Calendar",
+			"dijit/ColorPalette",
+			"dijit/TitlePane",
+			"dojo/domReady!"
+		], function(doh, dom, domConstruct, parser, registry, content){
+
+			doh.register("parser performance tests", [
+				// Test scan of DOM without any widgets
+				{
+					name: "blended structure",
+					testType: "perf",
+					trialIterations: 25,
+					setUp: function(){
+						dom.byId("status").innerHTML = "Running scan() with no widgets test...";
+					},
+					tearDown: function(){
+						domConstruct.empty("scan");
+					},
+					runTest: function(){
+					  domConstruct.place(content, "scan");
+						parser._clearCache();
+						parser.parse("scan");
+						registry.byId("bc").destroyRecursive();
+						domConstruct.empty("scan");
+					}
+				},
+
+				function results(){
+					dom.byId("status").innerHTML = "Graphing results...";
+				}
+			]);
+
+			doh.run();
+		});
+		</script>
+	</head>
+	<body>
+		<h1>Parser Performance Test</h1>
+
+		<!-- Display progress messages so test doesn't seem hung -->
+		<h2 id="status"></h2>
+
+		<!-- Test results are displayed here -->
+		<div id="perfTestsBody"></div>
+
+		<!-- for generating markup to scan (no widgets, just nodes) -->
+		<div id="scan" style="display: none">
+		</div>
+	</body>
+</html>

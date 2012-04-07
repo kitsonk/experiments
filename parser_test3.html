@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title>
+    Parser Experiment
+  </title>
+  <style type="text/css">
+    @import "../dojo/dijit/themes/claro/document.css";
+    @import "../dojo/dijit/themes/claro/claro.css";
+  </style>
+  <script type="text/javascript" src="../dojo/dojo/dojo.js" data-dojo-config="async: true"></script>
+  <script type="text/javascript">
+    require([
+        "dojo/_base/window",
+        "dojo/dom",
+        "dojo/dom-construct",
+        "dojo/parser",
+        "dijit/registry",
+        "dojo/text!./parser_bench_content.html",
+        "dijit/form/TextBox",
+        "dijit/layout/BorderContainer",
+        "dijit/layout/ContentPane",
+        "dijit/layout/TabContainer",
+        "dijit/Calendar",
+        "dijit/ColorPalette",
+        "dijit/TitlePane",
+        "dojo/domReady!"], 
+    function(win, dom, domConstruct, parser, registry, content){
+  
+      function size(o){
+        var s = 0, k;
+        for(k in o){
+          if(o.hasOwnProperty(k)) s++;
+        }
+        return s;
+      }
+      
+      domConstruct.place(content, "scan");
+  
+      var start1 = (new Date).getTime();
+      parser.parse(dom.byId("scan")).then(function(scanNodes){
+        var endScan = (new Date).getTime() - start1;
+        console.log("parser.parse(), " + scanNodes.length + " nodes in " + endScan + "ms");
+        registry.byId("bc").destroyRecursive();
+      });
+      
+    });
+  </script>
+</head>
+<body class="claro" dir="ltr">
+  <h1>
+    Parser Experiment
+  </h1>
+  <div id="scan">
+  </div>
+</body>
+</html>
