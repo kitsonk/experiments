@@ -14,9 +14,10 @@
     require([
         "dojo/_base/window",
         "dojo/AdapterRegistry",
+        "dojo/Deferred",
         "dojo/query",
         "dojo/domReady!"], 
-    function(win, AdapterRegistry, query){
+    function(win, AdapterRegistry, Deferred, query){
       function queryWalk(root){
         var parsedNodes = [];
         var nodes = query("[data-test]", root);
@@ -79,6 +80,55 @@
           }
           node = firstChild;
           parent = current;
+        }
+        return parsedNodes;
+      };
+      
+      var whileLogicWalk = function(root){
+        var node = root,
+            parent = {},
+            parsedNodes = [],
+            stopParser = false;
+        
+        while(true){
+          if(!node){
+            if(!parent || !parent.parent){
+              break;
+            }else{
+              node = parent.node.nextSibling;
+              parent = parent.parent;
+              stopParser = false;
+            }
+          }else if(node.nodeType !== 1){
+            node = node.nextSibling;
+          }else if(parent.scripts && node.nodeName.toLowerCase() == "script"){
+            type = node.getAttribute("type");
+            if(type && /^dojo\/\w/i.test(type)){
+              parent.scripts.push(node);
+            }
+            node = node.nextSibling;
+          }else if(stopParser){
+            node = node.nextSibling;
+          }else{
+            var type = node.getAttribute("data-test");
+            var firstChild = node.firstChild;
+            if(!type && (!firstChild || (firstChild.nodeType == 3 && !firstChild.nextSibling))){
+              node = node.nextSibling;
+            }else{
+              var current = {
+                node: node,
+                parent: parent
+              };
+              if(type){
+                current.type = type;
+                current.scripts = [];
+                parsedNodes.push(current);
+                stopParser = node.getAttribute("data-stop") ? true : false;
+              }
+              node = firstChild;
+              parent = current;
+            }
+          }
         }
         return parsedNodes;
       };
@@ -252,21 +302,117 @@
         return parsedNodes;
       }
       
+      resumeDFS = function(root){
+        var node = root,
+            parent = {},
+            parsedNodes = [],
+            nodes = [];
+            stopParser = false,
+            callStack = 0,
+            d = new Deferred();
+        
+        var next = function(){
+          nodes.push(node);
+          if(!node){
+            if(!parent || !parent.parent){
+              console.log("count: " + nodes.length);
+              d.resolve(parsedNodes);
+              return;
+            }else{
+              node = parent.node.nextSibling;
+  				    parent = parent.parent;
+  				    stopParser = false;
+  				    resume();
+  				    return;
+            }
+          }else if(node.nodeType !== 1){
+            node = node.nextSibling;
+            resume();
+            return;
+          }else if(parent.scripts && node.nodeName.toLowerCase() == "script"){
+            type = node.getAttribute("type");
+            if(type && /^dojo\/\w/i.test(type)){
+              parent.scripts.push(node);
+            }
+            node = node.nextSibling;
+            resume();
+            return;
+          }else if(stopParser){
+            node = node.nextSibling;
+            resume();
+            return;
+          }else{
+            var type = node.getAttribute("data-test");
+            var firstChild = node.firstChild;
+            if(!type && (!firstChild || (firstChild.nodeType == 3 && !firstChild.nextSibling))){
+              node = node.nextSibling;
+              resume();
+              return;
+            }else{
+              var current = {
+                node: node,
+                parent: parent
+              };
+            
+              if(type){
+                current.type = type;
+                current.scripts = [];
+                parsedNodes.push(current);
+                stopParser = node.getAttribute("data-stop") ? true : false;
+              }
+          
+              node = firstChild;
+              parent = current;
+              resume();
+              return;
+            }
+          }
+        };
+        
+        var resume = function(){
+          if(!callStack){
+            setTimeout(next, 1);
+          }else{
+            next();
+          }
+          callStack++;
+          if(callStack > 20){
+            callStack = 0;
+          }
+        };
+        
+        resume();
+        
+        return d;
+            
+      }
+      
+      var start1 = (new Date).getTime();
       var walk1 = whileWalk(win.body());
-      console.log("whileWalk: " + walk1.length);
-      console.log(walk1);
-      var walk2 = getWalk(win.body());
-      console.log("getWalk: " + walk2.length);
-      console.log(walk2);
-      var walk3 = queryWalk(win.body());
-      console.log("queryWalk: " + walk3.length);
-      console.log(walk3);
-      var walk4 = adapterWalk(win.body());
-      console.log("adapterWalk: " + walk4.length);
-      console.log(walk4);
-      var walk5 = recurseWalk(win.body());
-      console.log("recurseWalk: " + walk5.length);
-      console.log(walk5);
+      var duration = (new Date).getTime() - start1;
+      console.log("whileWalk: " + walk1.length + " in " + duration + "ms");
+      var start2 = (new Date).getTime();
+      var walk2 = whileLogicWalk(win.body());
+      var duration = (new Date).getTime() - start2;
+      console.log("whileWalk: " + walk2.length + " in " + duration + "ms");
+      // var walk2 = getWalk(win.body());
+      // console.log("getWalk: " + walk2.length);
+      // console.log(walk2);
+      // var walk3 = queryWalk(win.body());
+      // console.log("queryWalk: " + walk3.length);
+      // console.log(walk3);
+      // var walk4 = adapterWalk(win.body());
+      // console.log("adapterWalk: " + walk4.length);
+      // console.log(walk4);
+      // var walk5 = recurseWalk(win.body());
+      // console.log("recurseWalk: " + walk5.length);
+      // console.log(walk5);
+      // var start2 = (new Date).getTime();
+      // resumeDFS(win.body()).then(function(walk6){
+      //   duration = (new Date).getTime() - start2;
+      //   console.log("resumeDFS: " + walk6.length + " in " + duration + "ms");
+      //   console.log(walk6);
+      // })
       
     });
   </script>

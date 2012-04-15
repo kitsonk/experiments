@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title>
+    Parser Experiment
+  </title>
+  <style type="text/css">
+    @import "../dojo/dijit/themes/claro/document.css";
+    @import "../dojo/dijit/themes/claro/claro.css";
+  </style>
+  <script type="text/javascript" src="../dojo/dojo/dojo.js" data-dojo-config="async: true"></script>
+  <script type="text/javascript">
+    require([
+        "dojo/dom",
+        "dojo/parser",
+        "dojo/domReady!"], 
+    function(dom, parser){
+      console.log("parser");
+      parser.parse(dom.byId("scan"));
+    });
+  </script>
+</head>
+<body class="claro">
+  <h1>
+    Parser Experiment
+  </h1>
+  <div id="scan">
+    <script type="amd/require" data-amd-mids="dojo/dom, dojo/on, dijit/form/Button" data-amd-args="dom, on, Button">
+      console.log(arguments);
+      var b1 = new Button({}, "b1");
+      b1.on("click", function(e){
+        console.log("button1 clicked");
+      });
+    </script>
+    <button type="button" id="b1">Button 1</button>
+    <button type="button" id="b2" data-dojo-type="Button">
+      <span>Button 2</span>
+      <script type="dojo/on" >
+        console.log("button2 clicked");
+        on.emit(dom.byId("b1"), "click", { bubbles: true });
+      </script>
+    </button>
+  </div>
+</body>
+</html>

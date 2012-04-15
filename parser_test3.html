@@ -18,13 +18,6 @@
         "dojo/parser",
         "dijit/registry",
         "dojo/text!./parser_bench_content.html",
-        "dijit/form/TextBox",
-        "dijit/layout/BorderContainer",
-        "dijit/layout/ContentPane",
-        "dijit/layout/TabContainer",
-        "dijit/Calendar",
-        "dijit/ColorPalette",
-        "dijit/TitlePane",
         "dojo/domReady!"], 
     function(win, dom, domConstruct, parser, registry, content){
   
@@ -39,10 +32,9 @@
       domConstruct.place(content, "scan");
   
       var start1 = (new Date).getTime();
-      parser.parse(dom.byId("scan")).then(function(scanNodes){
+      var parseDeferred = parser.parse(dom.byId("scan")).then(function(scanNodes){
         var endScan = (new Date).getTime() - start1;
         console.log("parser.parse(), " + scanNodes.length + " nodes in " + endScan + "ms");
-        registry.byId("bc").destroyRecursive();
       });
       
     });
