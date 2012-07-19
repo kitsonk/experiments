@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Version Thing Experiment</title>
+	<script>
+		dojoConfig = {
+			async: true
+		};
+	</script>
+	<script type="text/javascript" src="../../dojo/dojo/dojo.js"></script>
+	<script>
+		require([
+			"dojo/ready",
+			"dojo/_base/window",
+			"dojo/dom",
+			"dojo/on"
+		], function(ready, win, dom, on){
+			ready(function(){
+				var pn = win.global.location.pathname;
+				console.log(win.global.location.href);
+				var example = "/reference-guide/1.7/dojo/dojo.html";
+				console.log(example.replace(/\/[12]\.[0-9]\//i, "/2.0/"));
+				var vs = dom.byId("selver");
+				on(vs, "change", function(e){
+					var v = e.target.value;
+					win.global.location.href = win.global.location.href.replace(/\/[12]\.[0-9]\//i, "/" + v + "/");
+				});
+			});
+		});
+	</script>
+</head>
+<body>
+	<h1>Version Thing Experiment</h1>
+	<div id="ver">
+		<label for="selver">Version:</label>
+		<select id="selver" name="selver">
+			<option value="1.6">1.6</option>
+			<option value="1.7">1.7</option>
+			<option value="1.8" selected="selected">1.8</option>
+		</select>
+	</div>
+</body>
+</html>

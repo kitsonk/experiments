@@ -1,0 +1,9 @@
+windowTitle = "$TM_DISPLAYNAME - experiments"
+projectDirectory = "$CWD"
+
+[ *.js ]
+softWrap = true
+wrapColumns = 120
+softTabs = false
+tabSize = 4
+spellChecking = true

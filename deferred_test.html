@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Deferred Test</title>
+	<script type="text/javascript">
+		dojoConfig = {
+			async: true
+		};
+	</script>
+	<script type="text/javascript" src="../dojo/dojo/dojo.js"></script>
+	<script type="text/javascript">
+		require(["dojo/_base/Deferred"], function(Deferred){
+			var dfd = new Deferred();
+   
+		    Deferred.when(dfd.promise, function(){
+		        throw new Error("Oops");
+		    }).then(null, function(err){
+		    	console.log(err);
+		    	throw err;
+		    });
+    
+		    dfd.resolve(null);
+		});
+	</script>
+</head>
+<body>
+	<h1>Deferred Test</title>
+</body>
+</html>

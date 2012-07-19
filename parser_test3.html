@@ -16,10 +16,11 @@
         "dojo/dom",
         "dojo/dom-construct",
         "dojo/parser",
+        "dojo/promise/tracer",
         "dijit/registry",
-        "dojo/text!./parser_bench_content.html",
+        "dojo/text!./simple.html",
         "dojo/domReady!"], 
-    function(win, dom, domConstruct, parser, registry, content){
+    function(win, dom, domConstruct, parser, tracer, registry, content){
   
       function size(o){
         var s = 0, k;
@@ -30,6 +31,10 @@
       }
       
       domConstruct.place(content, "scan");
+      
+      tracer.on("resolved", function(e){
+        console.log(e);
+      });
   
       var start1 = (new Date).getTime();
       var parseDeferred = parser.parse(dom.byId("scan")).then(function(scanNodes){

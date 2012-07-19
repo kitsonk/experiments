@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title>
+    dojo/request/iframe Experiment
+  </title>
+  <style type="text/css">
+    @import "../dojo/dijit/themes/claro/document.css";
+    @import "../dojo/dijit/themes/claro/claro.css";
+  </style>
+  <script type="text/javascript" src="../dojo/dojo/dojo.js" data-dojo-config="async: true"></script>
+  <script type="text/javascript">
+    require([
+        "dojo/request/iframe",
+        "dojo/dom",
+        "dojo/dom-construct",
+        "dojo/on",
+        "dojo/json",
+        "dojo/domReady!"], 
+    function(iframe, dom, domConst, on, JSON){
+      on(dom.byId("startButton"), "click", function(){
+        iframe.get("loaded.html", {
+          form: "contentArrayTest",
+          data: {
+            test: "value"
+          }
+        }).then(function(response){
+          domConst.place("<p>response: <code>" + JSON.stringify(response) + "</code></p>", "output");
+        }, function(err){
+          domConst.place("<p>err: <code>" + JSON.stringify(err) + "</code></p>", "output");
+        }, function(progess){
+          domConst.place("<p>progress: <code>" + JSON.stringify(progress) + "</code></p>", "output");
+        });
+      });
+    });
+  </script>
+</head>
+<body class="claro">
+  <h1>
+    dojo/request/iframe Experiment
+  </h1>
+  <button type="button" id="startButton">Start</button>
+  <div id="output"></div>
+  <form id="contentArrayTest" method="get" enctype="multipart/form-data"></form>
+</body>
+</html>
