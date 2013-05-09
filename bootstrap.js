@@ -2,7 +2,7 @@
 
 dojoConfig = {
 	async: true,
-	baseUrl: "../../Documents/dtk/",
+	baseUrl: "../",
 	packages: [{
 		name: "dojo",
 		location: "dojo"
@@ -13,10 +13,16 @@ dojoConfig = {
 		name: "dojox",
 		location: "dojox"
 	},{
+		name: "hokan",
+		location: "hokan"
+	}, {
+		name: 'd2-proto',
+		location: 'd2-proto'
+	},{
 		name: "experiments",
-		location: "../../github/experiments/lib/experiments"
+		location: "./experiments/lib/experiments"
 	}],
 	deps: [process.argv[2]]
 };
 
-require("../../Documents/dtk/dojo/dojo.js");
+require("../dojo/dojo.js");

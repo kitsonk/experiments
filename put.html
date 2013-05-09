@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Testing Put</title>
+	<style type="text/css">
+	@import "../dijit/themes/claro/claro.css";
+	@import "../dijit/themes/claro/document.css";
+
+	body {
+		padding: 1em;
+	}
+	</style>
+	<script type="text/javascript">
+	dojoConfig = {
+		async: true,
+		pacakges: [{
+			name: "dojo",
+			location: "dojo"
+		}, {
+			name: "d2-proto",
+			location: "d2-proto"
+		}]
+	};
+	</script>
+	<script type="text/javascript" src="../dojo/dojo.js"></script>
+	<script type="text/javascript">
+	require([
+		'd2-proto/put',
+		'dojo/dom'
+	], function(put, dom) {
+		var node = put(dom.byId('root'), 'div.test');
+		node.innerHTML = 'test';
+		put(node, '.another.class');
+
+		// when(store.ready).then(function () {
+		// 	when(store.remove('a5462e3b-f073-41c5-afb0-836d6d9054ad')).then(function (results) {
+		// 		console.log('results:', results);
+		// 	});
+		// });
+	});
+	</script>
+</head>
+<body class="claro">
+	<h1>Testing IndexedDB</h1>
+	<div id="root"></div>
+</body>
+</html>

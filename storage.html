@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Storage Experiments</title>
+	<style type="text/css">
+	@import "../dijit/themes/claro/claro.css";
+	@import "../dijit/themes/claro/document.css";
+	</style>
+	<script type="text/javascript">
+		dojoConfig = {
+			async: true,
+			isDebug: true
+		};
+	</script>
+	<script type="text/javascript" src="../dojo/dojo.js"></script>
+	<script type="text/javascript">
+	require(["dojo/store/Sync", "dojo/store/Memory", "dojo/store/LocalStorage", "dojo/domReady!"],
+	function(Sync, Memory, LocalStorage){
+		var store = Sync([new LocalStorage(), new Memory()], {});
+		store.pause();
+		store.get(1);
+		console.log(store.transactionQueue);
+	});
+	</script>
+</head>
+<body>
+	<h1>Storage Experiments</h1>
+</body>
+</html>

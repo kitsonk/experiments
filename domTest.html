@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DOM Experiments</title>
+	<style type="text/css">
+	@import "../dijit/themes/claro/claro.css";
+	@import "../dijit/themes/claro/document.css";
+	</style>
+	<script type="text/javascript">
+	dojoConfig = {
+		async: true,
+		pacakges: [{
+			name: 'dojo',
+			location: 'dojo'
+		},{
+			name: 'dijit',
+			location: 'dijit'
+		},{
+			name: 'd2-proto',
+			location: 'd2-proto'
+		}]
+	};
+	</script>
+	<script type="text/javascript" src="../dojo/dojo.js"></script>
+	<script type="text/javascript">
+	require([
+		'd2-proto/dom',
+		'dojo/domReady!'
+	], function (dom) {
+		// console.log(Object.keys(dom));
+		// dom.put(document.body, 'div p', {
+		// 	innerText: 'test'
+		// });
+		console.log(dom.query(document.body, 'div p'));
+	});
+	</script>
+</head>
+<body>
+	<h1>DOM Experiments</h1>
+	<div id="one">
+		<p>Return Me!</p>
+		<div>
+			<p>Lots of returns</p>
+		</div>
+	</div>
+</body>
+</html>

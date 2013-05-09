@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test Parser</title>
+	<style type="text/css">
+	@import "../dijit/themes/claro/claro.css";
+	@import "../dijit/themes/claro/document.css";
+
+	body {
+		padding: 1em;
+	}
+	</style>
+	<script type="text/javascript">
+
+	function clickMe(e){
+		console.log("clicked");
+	}
+
+	dojoConfig = {
+		async: 1,
+		packages: [{
+			name: "dojo",
+			location: "../dojo"
+		},{
+			name: "dijit",
+			location: "../dijit"
+		},{
+			name: "exp",
+			location: "../experiments/exp"
+		}]
+	};
+	</script>
+	<script type="text/javascript" src="../dojo/dojo.js"></script>
+	<script type="text/javascript">
+	require(["exp/WidgetTest"], function(WidgetTest){
+		var w = new WidgetTest({
+
+		}, "test");
+		w.startup();
+	});
+	</script>
+</head>
+<body class="claro">
+	<h1>Testing The Parser</h1>
+	<div id="test"></div>
+</body>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test Parser</title>
+	<style type="text/css">
+	@import "../dijit/themes/claro/claro.css";
+	@import "../dijit/themes/claro/document.css";
+
+	body {
+		padding: 1em;
+	}
+	</style>
+	<script type="text/javascript">
+
+	function clickMe(e){
+		console.log("clicked");
+	}
+
+	dojoConfig = {
+		async: 1,
+		pacakges: [{
+			name: "dojo",
+			location: "dojo"
+		},{
+			name: "dijit",
+			location: "dijit"
+		},{
+			name: "d2-proto",
+			location: "d2-proto"
+		}]
+	};
+	</script>
+	<script type="text/javascript" src="../dojo/dojo.js"></script>
+	<script type="text/javascript">
+	require(["d2-proto/parser", "dijit/form/Button"], function(parser){
+		parser.parse().then(function(o){
+			console.log(o);
+		});
+	});
+	</script>
+</head>
+<body class="claro">
+	<h1>Testing The Parser</h1>
+	<button type="button" id="test" data-dojo-type="dijit/form/Button" data-dojo-props="onClick: clickMe">Click Me!</button>
+</body>

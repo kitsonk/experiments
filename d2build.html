@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>d2 Experiments</title>
+	<style type="text/css">
+	@import "../dijit/themes/claro/claro.css";
+	@import "../dijit/themes/claro/document.css";
+	</style>
+	<script type="text/javascript">
+	dojoConfig = {
+		async: true,
+		isDebug: true,
+		packages: [{
+			name: 'dojo',
+			location: '../builds/d2/dojo'
+		}, {
+			name: 'd2-proto',
+			location: '../builds/d2/d2-proto'
+		}]
+	};
+	</script>
+	<script type="text/javascript" src="../builds/d2/d2-proto/base.js"></script>
+	<script type="text/javascript">
+	require(['d2-proto/dom', 'd2-proto/doc', 'dojo/domReady!'],
+	function(dom, doc){
+		dom.put(doc.body, 'h2[content=Hello World]');
+	});
+	</script>
+</head>
+<body>
+	<h1>d2 Build Experiments</h1>
+</body>
+</html>

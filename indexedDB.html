@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Testing IndexDB</title>
+	<style type="text/css">
+	@import "../dijit/themes/claro/claro.css";
+	@import "../dijit/themes/claro/document.css";
+
+	body {
+		padding: 1em;
+	}
+	</style>
+	<script type="text/javascript">
+	dojoConfig = {
+		async: true,
+		pacakges: [{
+			name: "dojo",
+			location: "dojo"
+		}, {
+			name: "hokan",
+			location: "hokan"
+		}]
+	};
+	</script>
+	<script type="text/javascript" src="../dojo/dojo.js"></script>
+	<script type="text/javascript">
+	require([
+		'hokan/IndexedDB',
+		'dojo/when'
+	], function(IndexedDB, when) {
+		var store = new IndexedDB({
+			name: 'store',
+			version: 4
+		});
+
+		when(store.ready).then(function(){
+			store.clear();
+			store.query().forEach(function (item) {
+				console.log(item);
+			});	
+		});
+
+		// when(store.ready).then(function () {
+		// 	when(store.remove('a5462e3b-f073-41c5-afb0-836d6d9054ad')).then(function (results) {
+		// 		console.log('results:', results);
+		// 	});
+		// });
+	});
+	</script>
+</head>
+<body class="claro">
+	<h1>Testing IndexedDB</h1>
+</body>
+</html>

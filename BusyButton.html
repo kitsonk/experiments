@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Testing Widgets</title>
+	<style type="text/css">
+	@import "../dijit/themes/claro/claro.css";
+	@import "../dijit/themes/claro/document.css";
+	@import "../uxijetto/resources/BusyButton.css";
+
+	body {
+		padding: 1em;
+	}
+	</style>
+	<script type="text/javascript">
+	dojoConfig = {
+		async: true,
+		pacakges: [{
+			name: "dojo",
+			location: "dojo"
+		}, {
+			name: "dijit",
+			location: "dijit"
+		}, {
+			name: "uxijetto",
+			location: "uxijetto"
+		}]
+	};
+	</script>
+	<script type="text/javascript" src="../dojo/dojo.js"></script>
+	<script type="text/javascript">
+	require(['uxijetto/BusyButton', 'dojo/domReady!'], function (BusyButton) {
+		var b1 = new BusyButton({
+			id: 'b1'
+		}, 'b1');
+		b1.startup();
+	});
+	</script>
+</head>
+<body class="claro">
+	<button type="button" id="b1">Hello World</button>
+</body>
+</html>

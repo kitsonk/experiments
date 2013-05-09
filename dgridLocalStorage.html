@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Testing Widgets</title>
+	<style type="text/css">
+	@import "../dojo/resources/dojo.css";
+	@import "../dgrid/css/dgrid.css";
+	@import "../dgrid/css/skins/claro.css";
+
+	body {
+		padding: 1em;
+	}
+	</style>
+	<script type="text/javascript">
+	dojoConfig = {
+		async: true,
+		pacakges: [{
+			name: 'dojo',
+			location: 'dojo'
+		}, {
+			name: 'dgrid',
+			location: 'dgrid'
+		}, {
+			name: 'hokan',
+			location: 'hokan'
+		}]
+	};
+	</script>
+	<script type="text/javascript" src="../dojo/dojo.js"></script>
+	<script type="text/javascript">
+	require([
+		'dgrid/OnDemandGrid',
+		'hokan/IndexedDB',
+		'dojo/dom',
+		'dojo/on',
+		'dojo/when',
+		'dojo/domReady!'
+	], function(OnDemandGrid, IndexedDB, dom, on, when) {
+		var idb = new IndexedDB({
+			dbName: 'example',
+			name: 'collection',
+			version: 1
+		});
+
+		on(dom.byId('b1'), 'click', function () {
+			idb.add({
+				number1: Math.floor(Math.random() * 100),
+				number2: Math.floor(Math.random() * 1000),
+				number3: Math.floor(Math.random() * 10000)
+			});
+		});
+
+		when(idb.ready).then(function () {
+			var grid = new OnDemandGrid({
+				store: idb,
+				columns: {
+					number1: 'Number 1',
+					number2: 'Number 2',
+					number3: 'Number 3'
+				}
+			}, 'grid');
+
+			grid.startup();
+		});
+	});
+	</script>
+</head>
+<body class="claro">
+	<h1>Example of dGrid and hokan IndexedDB</h1>
+	<button type="button" id="b1">Add Data</button>
+	<div id="grid"></div>
+</body>
+</html>
